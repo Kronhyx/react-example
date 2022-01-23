@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, FormControlLabel, Switch } from '@material-ui/core'
+import { Button, Card, CardActions, CardContent, FormControlLabel, Switch, TextField } from '@material-ui/core'
 import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -21,11 +21,14 @@ export interface UserItemSelectable extends UserItem {
 
 export const UserList: FunctionComponent<UserListProps> = ({ items }) => {
   const [users, setUsers] = useState<UserItemSelectable[]>(items)
+  const [search, setSearch] = useState<string>('')
   const [showOnlyFemales, setShowOnlyFemales] = useState<boolean>(false)
 
   useEffect(() => setUsers(items.map(user => ({ ...user, selected: false }))), [items])
 
-  const visibleItems = () => users.filter(user => showOnlyFemales ? user.gender === 'Female' : true)
+  const visibleItems = () => users
+    .filter(user => user.first_name.toLowerCase().includes(search.toLowerCase()))
+    .filter(user => showOnlyFemales ? user.gender === 'Female' : true)
 
   const itemsSelected = () => visibleItems().filter(item => item.selected)
 
@@ -51,6 +54,11 @@ export const UserList: FunctionComponent<UserListProps> = ({ items }) => {
 
   return (
     <Card>
+
+      <CardActions className="UserListSearch">
+        <TextField label="Search by name" value={search} onChange={(event => setSearch(event.target.value))} />
+      </CardActions>
+
       <CardContent>
         <TableContainer component={Paper}>
           <Table>
@@ -86,8 +94,8 @@ export const UserList: FunctionComponent<UserListProps> = ({ items }) => {
                            onChange={(event) => setShowOnlyFemales(event.target.checked)} />}
           label="Show only Females"
         />
-
       </CardActions>
+
     </Card>
   )
 }

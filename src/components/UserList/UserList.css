@@ -1,3 +1,7 @@
+.UserListSearch {
+  justify-content: end;
+}
+
 .UserListActions {
   justify-content: space-between;
 }

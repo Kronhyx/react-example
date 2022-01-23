@@ -3,9 +3,16 @@ import { SwitchBaseProps } from '@material-ui/core/internal/SwitchBase'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import React, { FunctionComponent, useState } from 'react'
-import { User } from '../UserList/UserList'
 
-export interface UserListItemProps extends User {
+export interface UserItem {
+  id: number,
+  first_name: string,
+  last_name: string,
+  email: string,
+  gender: string
+}
+
+export interface UserListItemProps extends UserItem {
   onSelect?: (id: number, state: boolean) => any
 }
 
@@ -19,7 +26,7 @@ export const UserListItem: FunctionComponent<UserListItemProps> = (props) => {
   })
 
   return (
-    <TableRow key={props.id}>
+    <TableRow hover key={props.id}>
       <TableCell>
         <Checkbox onChange={onChange} />
       </TableCell>

@@ -1,0 +1,37 @@
+[
+  {
+    "id": 26526,
+    "email": "geovanni_schoen@hotmail.com",
+    "first_name": "Elmo",
+    "last_name": "Friesen",
+    "gender": "Male"
+  },
+  {
+    "id": 33853,
+    "email": "juwan_stehr@hotmail.com",
+    "first_name": "Sanford",
+    "last_name": "Wiegand",
+    "gender": "Male"
+  },
+  {
+    "id": 43066,
+    "email": "godfrey_deckow32@hotmail.com",
+    "first_name": "Norma",
+    "last_name": "Spinka",
+    "gender": "Male"
+  },
+  {
+    "id": 10204,
+    "email": "gloria.bauch@gmail.com",
+    "first_name": "Dereck",
+    "last_name": "Nikolaus",
+    "gender": "Female"
+  },
+  {
+    "id": 83951,
+    "email": "emilie_sipes17@yahoo.com",
+    "first_name": "Maureen",
+    "last_name": "Torphy",
+    "gender": "Female"
+  }
+]

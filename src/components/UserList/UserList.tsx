@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent } from '@material-ui/core'
+import { Button, Card, CardActions, CardContent, FormControlLabel, Switch } from '@material-ui/core'
 import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -7,8 +7,9 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import DeleteIcon from '@material-ui/icons/Delete'
-import React, { FunctionComponent, useState } from 'react'
+import React, { FunctionComponent, ReactComponentElement, useState } from 'react'
 import { UserItem, UserListItem } from '../UserListItem/UserListItem'
+import './UserList.css'
 
 export interface UserListProps {
   items: UserItem[]
@@ -16,8 +17,10 @@ export interface UserListProps {
 
 export const UserList: FunctionComponent<UserListProps> = ({ items }) => {
   const [users, setUsers] = useState<UserItem[]>(items)
+  const [showOnlyFemales, setShowOnlyFemales] = useState<boolean>(false)
   const [itemsSelected, setItemsSelected] = useState<number[]>([])
   const hasItemsSelected = () => !!itemsSelected.length
+
   const deleteSelected = () => {
     const remainingUsers = users.filter(user => !itemsSelected.includes(user.id))
 
@@ -37,6 +40,13 @@ export const UserList: FunctionComponent<UserListProps> = ({ items }) => {
 
   }
 
+  const visibleUserListItems = (renderItem: (user: UserItem) => ReactComponentElement<any>) => {
+
+    return users
+      .filter(user => showOnlyFemales ? user.gender === 'Female' : true)
+      .map(renderItem)
+  }
+
   return (
     <Card>
       <CardContent>
@@ -52,20 +62,27 @@ export const UserList: FunctionComponent<UserListProps> = ({ items }) => {
                 <TableCell>Gender</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>{users.map((user) =>
-              <UserListItem key={user.id} {...user} onSelect={onListItemSelected} />
-            )}</TableBody>
+            <TableBody>
+              {visibleUserListItems(user => <UserListItem key={user.id} {...user} onSelect={onListItemSelected} />)}
+            </TableBody>
           </Table>
         </TableContainer>
       </CardContent>
 
-      <CardActions>
+      <CardActions className="UserListActions">
         <Button color="secondary" startIcon={<DeleteIcon />} disabled={!hasItemsSelected()} onClick={deleteSelected}>
           <span>Remove</span>
           {hasItemsSelected() && <span>
             ({itemsSelected.length})
           </span>}
         </Button>
+
+        <FormControlLabel
+          control={<Switch name="jason" checked={showOnlyFemales}
+                           onChange={(event) => setShowOnlyFemales(event.target.checked)} />}
+          label="Show only Females"
+        />
+
       </CardActions>
     </Card>
   )

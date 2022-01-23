@@ -7,7 +7,7 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import DeleteIcon from '@material-ui/icons/Delete'
-import React, { FunctionComponent, ReactComponentElement, useState } from 'react'
+import React, { FunctionComponent, ReactComponentElement, useEffect, useState } from 'react'
 import { UserItem, UserListItem } from '../UserListItem/UserListItem'
 import './UserList.css'
 
@@ -15,36 +15,38 @@ export interface UserListProps {
   items: UserItem[]
 }
 
-export const UserList: FunctionComponent<UserListProps> = ({ items }) => {
-  const [users, setUsers] = useState<UserItem[]>(items)
-  const [showOnlyFemales, setShowOnlyFemales] = useState<boolean>(false)
-  const [itemsSelected, setItemsSelected] = useState<number[]>([])
-  const hasItemsSelected = () => !!itemsSelected.length
+export interface UserItemSelectable extends UserItem {
+  selected?: boolean
+}
 
-  const deleteSelected = () => {
-    const remainingUsers = users.filter(user => !itemsSelected.includes(user.id))
+export const UserList: FunctionComponent<UserListProps> = ({ items }) => {
+  const [users, setUsers] = useState<UserItemSelectable[]>(items)
+  const [showOnlyFemales, setShowOnlyFemales] = useState<boolean>(false)
+
+  useEffect(() => setUsers(items.map(user => ({ ...user, selected: false }))), [items])
+
+  const visibleItems = () => users.filter(user => showOnlyFemales ? user.gender === 'Female' : true)
+
+  const itemsSelected = () => visibleItems().filter(item => item.selected)
+
+  const hasItemsSelected = () => !!itemsSelected().length
+
+  const deleteSelection = () => {
+    const remainingUsers = visibleItems().filter(user => !user.selected)
 
     setUsers(remainingUsers)
-    setItemsSelected([])
   }
 
-  const onListItemSelected = (id: number, state: boolean) => {
+  const onUserSelected = (user: UserItemSelectable, selected: boolean) => {
+    user.selected = selected
 
-    if (state) {
-      setItemsSelected(old => [...old, id])
-    }
-
-    if (!state) {
-      setItemsSelected(itemsSelected.filter(key => key !== id))
-    }
-
+    setUsers(users.map(item => item.id === user.id
+      ? { ...item, selected }
+      : item))
   }
 
-  const visibleUserListItems = (renderItem: (user: UserItem) => ReactComponentElement<any>) => {
-
-    return users
-      .filter(user => showOnlyFemales ? user.gender === 'Female' : true)
-      .map(renderItem)
+  const renderVisibleUsers = (renderItem: (user: UserItemSelectable) => ReactComponentElement<any>) => {
+    return visibleItems().map(renderItem)
   }
 
   return (
@@ -62,19 +64,21 @@ export const UserList: FunctionComponent<UserListProps> = ({ items }) => {
                 <TableCell>Gender</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {visibleUserListItems(user => <UserListItem key={user.id} {...user} onSelect={onListItemSelected} />)}
-            </TableBody>
+            <TableBody>{renderVisibleUsers(user =>
+              <UserListItem
+                key={user.id}
+                checked={user.selected} {...user}
+                onSelect={checked => onUserSelected(user, checked)}
+              />
+            )}</TableBody>
           </Table>
         </TableContainer>
       </CardContent>
 
       <CardActions className="UserListActions">
-        <Button color="secondary" startIcon={<DeleteIcon />} disabled={!hasItemsSelected()} onClick={deleteSelected}>
+        <Button color="secondary" startIcon={<DeleteIcon />} disabled={!hasItemsSelected()} onClick={deleteSelection}>
           <span>Remove</span>
-          {hasItemsSelected() && <span>
-            ({itemsSelected.length})
-          </span>}
+          {hasItemsSelected() && <span>({itemsSelected().length})</span>}
         </Button>
 
         <FormControlLabel

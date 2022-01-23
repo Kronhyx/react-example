@@ -2,7 +2,7 @@ import { Checkbox } from '@material-ui/core'
 import { SwitchBaseProps } from '@material-ui/core/internal/SwitchBase'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
-import React, { FunctionComponent, useState } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 
 export interface UserItem {
   id: number,
@@ -13,22 +13,25 @@ export interface UserItem {
 }
 
 export interface UserListItemProps extends UserItem {
-  onSelect?: (id: number, state: boolean) => any
+  onSelect?: (checked: boolean) => void
+  checked?: boolean
 }
 
 export const UserListItem: FunctionComponent<UserListItemProps> = (props) => {
-  const [, setChecked] = useState(false)
+  const [checked, setChecked] = useState(props.checked)
+  useEffect(() => setChecked(props.checked || false), [props.checked]);
+
   const onChange: SwitchBaseProps['onChange'] = (event => {
     const isChecked = event.target.checked
     setChecked(isChecked)
 
-    return props.onSelect?.(props.id, isChecked)
+    return props.onSelect?.(isChecked)
   })
 
   return (
     <TableRow hover key={props.id}>
       <TableCell>
-        <Checkbox onChange={onChange} />
+        <Checkbox checked={checked} onChange={onChange} />
       </TableCell>
       <TableCell>{props.id}</TableCell>
       <TableCell>{props.email}</TableCell>

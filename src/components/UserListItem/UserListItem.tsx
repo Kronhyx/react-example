@@ -9,7 +9,7 @@ export interface UserItem {
   first_name: string,
   last_name: string,
   email: string,
-  gender: string
+  gender: 'Male' | 'Female'
 }
 
 export interface UserListItemProps extends UserItem {

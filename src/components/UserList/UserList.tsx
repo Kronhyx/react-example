@@ -34,6 +34,8 @@ export const UserList: FunctionComponent<UserListProps> = ({ items }) => {
 
   const hasItemsSelected = () => !!itemsSelected().length
 
+  const hasFemalesUsers = () => visibleItems().filter(item => item.gender === 'Female').length
+
   const deleteSelection = () => {
     const remainingUsers = visibleItems().filter(user => !user.selected)
 
@@ -90,9 +92,14 @@ export const UserList: FunctionComponent<UserListProps> = ({ items }) => {
         </Button>
 
         <FormControlLabel
-          control={<Switch name="jason" checked={showOnlyFemales}
-                           onChange={(event) => setShowOnlyFemales(event.target.checked)} />}
           label="Show only Females"
+          disabled={!hasFemalesUsers()}
+          control={
+            <Switch
+              name="jason"
+              checked={showOnlyFemales}
+              onChange={(event) => setShowOnlyFemales(event.target.checked)} />
+          }
         />
       </CardActions>
 

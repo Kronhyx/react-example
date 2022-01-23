@@ -38,7 +38,7 @@ export const UserListItem: FunctionComponent<UserListItemProps> = (props) => {
   return (
     <TableRow hover key={props.id}>
       <TableCell>
-        <Checkbox checked={checked} onChange={onChange} />
+        <Checkbox value={checked} onChange={onChange} />
       </TableCell>
       <TableCell>{props.id}</TableCell>
       <TableCell>{props.email}</TableCell>

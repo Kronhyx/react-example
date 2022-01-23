@@ -1,4 +1,13 @@
-import { Button, Card, CardActions, CardContent, FormControlLabel, Switch, TextField } from '@material-ui/core'
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  FormControlLabel,
+  Switch,
+  TextField,
+  Typography
+} from '@material-ui/core'
 import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -50,6 +59,8 @@ export const UserList: FunctionComponent<UserListProps> = ({ items }) => {
       : item))
   }
 
+  const isItemsListEmpty = () => !visibleItems().length
+
   const renderVisibleUsers = (renderItem: (user: UserItemSelectable) => ReactComponentElement<any>) => {
     return visibleItems().map(renderItem)
   }
@@ -74,13 +85,23 @@ export const UserList: FunctionComponent<UserListProps> = ({ items }) => {
                 <TableCell>Gender</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>{renderVisibleUsers(user =>
-              <UserListItem
-                key={user.id}
-                checked={user.selected} {...user}
-                onSelect={checked => onUserSelected(user, checked)}
-              />
-            )}</TableBody>
+            {
+              isItemsListEmpty()
+                ? <TableBody>
+                  <TableRow>
+                    <TableCell className="EmptyResults" colSpan={9}>
+                      <Typography variant="h6">No results found</Typography>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+                : <TableBody>{renderVisibleUsers(user =>
+                  <UserListItem
+                    key={user.id}
+                    checked={user.selected} {...user}
+                    onSelect={checked => onUserSelected(user, checked)}
+                  />
+                )}</TableBody>
+            }
           </Table>
         </TableContainer>
       </CardContent>

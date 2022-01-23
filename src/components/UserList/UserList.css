@@ -5,3 +5,7 @@
 .UserListActions {
   justify-content: space-between;
 }
+
+.EmptyResults {
+  text-align: center !important;
+}

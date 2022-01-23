@@ -8,7 +8,7 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import DeleteIcon from '@material-ui/icons/Delete'
 import React, { FunctionComponent, ReactComponentElement, useEffect, useState } from 'react'
-import { UserItem, UserListItem } from '../UserListItem/UserListItem'
+import { UserGender, UserItem, UserListItem } from '../UserListItem/UserListItem'
 import './UserList.css'
 
 export interface UserListProps {
@@ -28,13 +28,13 @@ export const UserList: FunctionComponent<UserListProps> = ({ items }) => {
 
   const visibleItems = () => users
     .filter(user => user.first_name.toLowerCase().includes(search.toLowerCase()))
-    .filter(user => showOnlyFemales ? user.gender === 'Female' : true)
+    .filter(user => showOnlyFemales ? user.gender === UserGender.FEMALE : true)
 
   const itemsSelected = () => visibleItems().filter(item => item.selected)
 
   const hasItemsSelected = () => !!itemsSelected().length
 
-  const hasFemalesUsers = () => visibleItems().filter(item => item.gender === 'Female').length
+  const hasFemalesUsers = () => visibleItems().filter(item => item.gender === UserGender.FEMALE).length
 
   const deleteSelection = () => {
     const remainingUsers = visibleItems().filter(user => !user.selected)

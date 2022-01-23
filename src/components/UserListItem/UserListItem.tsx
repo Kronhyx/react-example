@@ -1,15 +1,20 @@
-import { Checkbox } from '@material-ui/core'
+import { Checkbox, Chip } from '@material-ui/core'
 import { SwitchBaseProps } from '@material-ui/core/internal/SwitchBase'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import React, { FunctionComponent, useEffect, useState } from 'react'
+
+export enum UserGender {
+  MALE = 'Male',
+  FEMALE = 'Female'
+}
 
 export interface UserItem {
   id: number,
   first_name: string,
   last_name: string,
   email: string,
-  gender: 'Male' | 'Female'
+  gender: UserGender
 }
 
 export interface UserListItemProps extends UserItem {
@@ -19,7 +24,7 @@ export interface UserListItemProps extends UserItem {
 
 export const UserListItem: FunctionComponent<UserListItemProps> = (props) => {
   const [checked, setChecked] = useState(props.checked)
-  useEffect(() => setChecked(props.checked || false), [props.checked]);
+  useEffect(() => setChecked(props.checked || false), [props.checked])
 
   const onChange: SwitchBaseProps['onChange'] = (event => {
     const isChecked = event.target.checked
@@ -27,6 +32,8 @@ export const UserListItem: FunctionComponent<UserListItemProps> = (props) => {
 
     return props.onSelect?.(isChecked)
   })
+
+  const baseColor = (gender: UserGender) => gender === UserGender.MALE ? 'primary' : 'secondary'
 
   return (
     <TableRow hover key={props.id}>
@@ -37,7 +44,9 @@ export const UserListItem: FunctionComponent<UserListItemProps> = (props) => {
       <TableCell>{props.email}</TableCell>
       <TableCell>{props.first_name}</TableCell>
       <TableCell>{props.last_name}</TableCell>
-      <TableCell>{props.gender}</TableCell>
+      <TableCell>
+        <Chip color={baseColor(props.gender)} label={props.gender} />
+      </TableCell>
     </TableRow>
   )
 }

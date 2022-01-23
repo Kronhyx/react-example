@@ -4,7 +4,7 @@
     "first_name": "Bobina",
     "last_name": "Dumbell",
     "email": "bdumbell0@forbes.com",
-    "gender": "Bigender"
+    "gender": "Male"
   },
   {
     "id": 2,
@@ -18,7 +18,7 @@
     "first_name": "Carena",
     "last_name": "Wrankmore",
     "email": "cwrankmore2@people.com.cn",
-    "gender": "Genderfluid"
+    "gender": "Male"
   },
   {
     "id": 4,
@@ -53,7 +53,7 @@
     "first_name": "Wanda",
     "last_name": "Lief",
     "email": "wlief7@guardian.co.uk",
-    "gender": "Genderfluid"
+    "gender": "Female"
   },
   {
     "id": 9,
